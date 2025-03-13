@@ -12,20 +12,20 @@ jobs:
       - name: 🛎️ Checkout du code
         uses: actions/checkout@v3
 
-        # connexion à DockerHub
+      # Connexion à DockerHub
       - name: 🔑 Connexion à Docker Hub 
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: 🔨 Construire l'image Docker
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/gestion_trajet:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/gestion_trajet:latest .
 
       - name: 🚀 Pousser l'image sur Docker Hub
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/gestion_trajet:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/gestion_trajet:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -37,10 +37,10 @@ jobs:
       - name: 🔑 Connexion à Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: 🚢 Exécuter le conteneur Docker
         run: |
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/gestion_trajet:latest
-          docker run -d --name mon-container -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/gestion_trajet:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/gestion_trajet:latest
+          docker run -d --name mon-container -p 80:80 ${{ secrets.DOCKER_USERNAME }}/gestion_trajet:latest
